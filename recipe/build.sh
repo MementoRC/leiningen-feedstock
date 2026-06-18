@@ -39,7 +39,8 @@ cd "${SRC_DIR}"
 cp "${SRC_DIR}"/leiningen-src/leiningen-core/target/generated-sources/license/THIRD-PARTY.txt "${RECIPE_DIR}"/THIRD-PARTY.txt
 cp "${SRC_DIR}"/leiningen-src/COPYING "${RECIPE_DIR}"/COPYING
 
+sed -i "s/\(d.)+-SNAPSHOT/${PKG_VERSION}/" 
 # Use bootstrap to build the leiningen package
-cd "${SRC_DIR}"/leiningen-src && bin/lein uberjar && cd "${SRC_DIR}"
+cd "${SRC_DIR}"/leiningen-src && sed -i "s/\(d.)+-SNAPSHOT/${PKG_VERSION}/" bin/lein && bin/lein uberjar && cd "${SRC_DIR}"
 
 install_leiningen "${PREFIX}" "${SRC_DIR}"/leiningen-src/target "${PKG_VERSION}"
