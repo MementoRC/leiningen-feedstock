@@ -31,6 +31,7 @@ mamba install -y leiningen
 
 # Create bootstrap from source and extract the THIRD-PARTY.txt file
 cd "${SRC_DIR}"/leiningen-src/leiningen-core
+  sed -i -E "s/[0-9.]+-SNAPSHOT/${PKG_VERSION}/g" pom.xml project.clj
   lein bootstrap > _lein_bootstrap.log 2>&1
   mvn license:add-third-party -Dlicense.thirdPartyFile=THIRD-PARTY.txt > _lein_license.log 2>&1
 cd "${SRC_DIR}"
@@ -39,8 +40,7 @@ cd "${SRC_DIR}"
 cp "${SRC_DIR}"/leiningen-src/leiningen-core/target/generated-sources/license/THIRD-PARTY.txt "${RECIPE_DIR}"/THIRD-PARTY.txt
 cp "${SRC_DIR}"/leiningen-src/COPYING "${RECIPE_DIR}"/COPYING
 
-sed -i "s/\(d.)+-SNAPSHOT/${PKG_VERSION}/" 
 # Use bootstrap to build the leiningen package
-cd "${SRC_DIR}"/leiningen-src && sed -i "s/\(d.)+-SNAPSHOT/${PKG_VERSION}/" bin/lein && bin/lein uberjar && cd "${SRC_DIR}"
+cd "${SRC_DIR}"/leiningen-src && sed -i -E "s/[0-9.]+-SNAPSHOT/${PKG_VERSION}/g" bin/lein project.clj && bin/lein uberjar && cd "${SRC_DIR}"
 
 install_leiningen "${PREFIX}" "${SRC_DIR}"/leiningen-src/target "${PKG_VERSION}"

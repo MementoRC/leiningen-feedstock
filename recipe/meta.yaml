@@ -21,6 +21,7 @@ requirements:
   build:
     - openjdk
     - maven
+    - sed  # [unix]
   run:
     - openjdk
 
