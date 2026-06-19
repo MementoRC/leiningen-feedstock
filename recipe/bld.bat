@@ -23,6 +23,10 @@ goto :EOF
 :bootstrap_leiningen
 set "_prefix=%~1"
 cd "%SRC_DIR%"\leiningen-src\leiningen-core
+  echo "Patching SNAPSHOT version to %PKG_VERSION% ..."
+  powershell -Command "(Get-Content pom.xml) -replace '[0-9.]+-SNAPSHOT', '%PKG_VERSION%' | Set-Content pom.xml"
+  powershell -Command "(Get-Content project.clj) -replace '[0-9.]+-SNAPSHOT', '%PKG_VERSION%' | Set-Content project.clj"
+  findstr SNAPSHOT pom.xml project.clj >nul 2>&1 && (echo ERROR: SNAPSHOT remains in leiningen-core & exit 1)
   echo "Bootstrapping ..."
   set "LEIN_JAR=%_prefix%\lib\leiningen\libexec\leiningen-%_pkg_version%-standalone.jar"
   call lein bootstrap
@@ -35,7 +39,9 @@ goto :EOF
 
 :build_uberjar
 cd "%SRC_DIR%"\leiningen-src
-  set "DEBUG=1"
+  powershell -Command "(Get-Content bin\lein.bat) -replace '[0-9.]+-SNAPSHOT', '%PKG_VERSION%' | Set-Content bin\lein.bat"
+  powershell -Command "(Get-Content project.clj) -replace '[0-9.]+-SNAPSHOT', '%PKG_VERSION%' | Set-Content project.clj"
+  findstr SNAPSHOT bin\lein.bat project.clj >nul 2>&1
   echo "Uberjar ..."
   call bin\lein uberjar
   if errorlevel 1 exit 1

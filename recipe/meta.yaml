@@ -1,5 +1,5 @@
 {% set name = "leiningen" %}
-{% set version = "2.12.0" %}
+{% set version = "2.13.0" %}
 
 package:
   name: {{ name|lower }}
@@ -7,7 +7,7 @@ package:
 
 source:
   - url: https://github.com/technomancy/leiningen/archive/refs/tags/{{ version }}.tar.gz
-    sha256: a190d92325b552621b1709a42a2cb78c74ffd795269f48e7619031e1127ad542
+    sha256: a71aaf44eaf7796198943bd6db7662c99664bb6441f8dc7216d4a87fa4ea4dad
     folder: leiningen-src
   # This is used when the previous conda version cannot build from source
   # - url: https://github.com/technomancy/leiningen/releases/download/{{ version }}/leiningen-{{ version }}-standalone.jar
@@ -21,6 +21,7 @@ requirements:
   build:
     - openjdk
     - maven
+    - sed  # [unix]
   run:
     - openjdk
 
